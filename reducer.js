@@ -18,6 +18,19 @@ function reducer (state = initialState, action) {
                     }
                     , ...state]
             });
+        case REMOVE_COMMENT:
+            return Object.assign({},state,{
+                comments: state.comments.filter(comment=>comment.id!==action.id)
+            });
+        case EDIT_COMMENT:
+            const editedComment= state.comments.filter(comment=>comment.id===action.id);
+            return Object.assign({},state,{
+                // comments: state.comments.filter(comment=>comment.id===action.id)
+            });
+        case THUMB_UP_COMMENT:
+            return Object.assign({},state,{
+
+            });
         default:
             return state;
     }
