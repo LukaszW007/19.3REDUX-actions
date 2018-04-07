@@ -5,7 +5,7 @@ const initialState = {
     users: []
 };
 
-function reducer (state = initialState, action) {
+function reducer(state = initialState, action) {
     switch (action.type) {
         case
         ADD_COMMENT:
@@ -19,17 +19,47 @@ function reducer (state = initialState, action) {
                     , ...state]
             });
         case REMOVE_COMMENT:
-            return Object.assign({},state,{
-                comments: state.comments.filter(comment=>comment.id!==action.id)
+            return Object.assign({}, state, {
+                comments: state.comments.filter(comment => comment.id !== action.id)
             });
         case EDIT_COMMENT:
-            const editedComment= state.comments.filter(comment=>comment.id===action.id);
-            return Object.assign({},state,{
-                // comments: state.comments.filter(comment=>comment.id===action.id)
+            const editedComment = state.comments.filter(comment => {
+                if (comment.id === action.id) {
+                    return{
+                        id: comment.id,
+                        text: action.text,
+                        votes: comment.votes
+                    };
+                }
+            });
+            return Object.assign({}, state, {
+                comments: state.comments.splice(action.id,1,editedComment)
             });
         case THUMB_UP_COMMENT:
-            return Object.assign({},state,{
-
+            const thumbUpComment = state.comments.filter(comment => {
+                if (comment.id === action.id) {
+                    return{
+                        id: action.id,
+                        text: comment.text,
+                        votes: comment.votes + 1
+                    };
+                }
+            });
+            return Object.assign({}, state, {
+                comments: state.comments.splice(action.id,1,thumbUpComment)
+            });
+        case THUMB_DOWN_COMMENT:
+            const thumbDownComment = state.comments.filter(comment => {
+                if (comment.id === action.id) {
+                    return{
+                        id: action.id,
+                        text: comment.text,
+                        votes: comment.votes + 1
+                    };
+                }
+            });
+            return Object.assign({}, state, {
+                comments: state.comments.splice(action.id,1,thumbDownComment)
             });
         default:
             return state;
